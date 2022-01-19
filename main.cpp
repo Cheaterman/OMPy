@@ -24,19 +24,12 @@ struct OMPyComponent final : IComponent {
 #ifndef WIN32
         dlopen(PYTHON_LIBRARY, RTLD_GLOBAL | RTLD_LAZY);
 #endif
-
         Py_SetPythonHome(PYTHON_HOME);
-        Py_SetProgramName(L"OMPy");
+        wchar_t *programName = (wchar_t *)L"OMPy";
+        Py_SetProgramName(programName);
 
-        Py_Initialize();
-
-        PyObject* osModule = PyImport_ImportModule("os");
-        PyObject* cwdStr = PyObject_CallMethod(osModule, "getcwd", NULL);
-        Py_DECREF(osModule);
-
-        PyObject* sysPath = PySys_GetObject("path");
-        PyList_Append(sysPath, cwdStr);
-        Py_DECREF(cwdStr);
+        Py_InitializeEx(false);
+        PySys_SetArgv(1, &programName);
     }
 
     void onReady() override {
