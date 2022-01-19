@@ -1,0 +1,11 @@
+#ifndef PYTHON_VARS_H
+#define PYTHON_VARS_H
+
+#ifndef WIN32
+    #include <dlfcn.h>
+    #define PYTHON_LIBRARY "@Python3_LIBRARIES@"
+#endif
+
+#define PYTHON_HOME L"@PYTHON_HOME@"
+
+#endif
