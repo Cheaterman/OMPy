@@ -1,14 +1,15 @@
+#define PY_SSIZE_T_CLEAN
 #include <Python.h>
 #include <sdk.hpp>
 
 #include "python_vars.h"
 
 
-struct PyOMPComponent final : IComponent {
+struct OMPyComponent final : IComponent {
     PROVIDE_UniqueID(0x33342353125330CC);
 
     StringView componentName() const override {
-        return "PyOMP";
+        return "OMPy";
     }
 
     SemanticVersion componentVersion() const override {
@@ -25,6 +26,8 @@ struct PyOMPComponent final : IComponent {
 #endif
 
         Py_SetPythonHome(PYTHON_HOME);
+        Py_SetProgramName(L"OMPy");
+
         Py_Initialize();
 
         PyObject* osModule = PyImport_ImportModule("os");
@@ -51,5 +54,5 @@ struct PyOMPComponent final : IComponent {
 
 
 COMPONENT_ENTRY_POINT() {
-    return new PyOMPComponent();
+    return new OMPyComponent();
 }

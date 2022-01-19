@@ -1,4 +1,4 @@
-# PyOMP
+# OMPy
 
 Python support for open.mp.
 
@@ -17,9 +17,9 @@ Visual Studio needs the `Desktop development with C++` workload with the `MSVC v
 
 ```bash
 # With HTTPS:
-git clone --recursive https://github.com/Cheaterman/PyOMP.git
+git clone --recursive https://github.com/Cheaterman/OMPy.git
 # With SSH:
-git clone --recursive git@github.com:Cheaterman/PyOMP.git
+git clone --recursive git@github.com:Cheaterman/OMPy.git
 ```
 
 Note the use of the `--recursive` argument, because this repository contains submodules.
