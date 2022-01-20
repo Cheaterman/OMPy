@@ -3,6 +3,7 @@
 #include <sdk.hpp>
 
 #include "python_vars.h"
+#include "ompy.h"
 
 
 struct OMPyComponent final : IComponent {
@@ -28,8 +29,13 @@ struct OMPyComponent final : IComponent {
         wchar_t *programName = (wchar_t *)L"OMPy";
         Py_SetProgramName(programName);
 
+        PyImport_AppendInittab("ompy", PyInit_ompy);
+
         Py_InitializeEx(false);
         PySys_SetArgv(1, &programName);
+
+        PyImport_ImportModule("ompy");
+        OMPy_setCore(core);
     }
 
     void onReady() override {
@@ -38,6 +44,7 @@ struct OMPyComponent final : IComponent {
     }
 
     void free() override {
+        OMPy_setCore(nullptr);
         Py_FinalizeEx();
         delete this;
     }
