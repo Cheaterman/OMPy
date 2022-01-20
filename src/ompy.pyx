@@ -1,26 +1,15 @@
-cdef Core _core_instance = None
+cdef ICore* _core = NULL
 
 cdef class Core:
     cdef ICore* core
 
-    @staticmethod
-    cdef void set_core(ICore* core):
-        global _core_instance
+    def __cinit__(self):
+        if _core is NULL:
+            raise RuntimeError(
+                'Cannot instantiate Core: OMPy is not initialized.'
+            )
 
-        if not core:
-            _core_instance = None
-            return
-
-        cdef Core new_core = Core.__new__(Core)
-        new_core.core = core
-        _core_instance = new_core
-
-    @classmethod
-    def get(cls):
-        if _core_instance is None:
-            raise RuntimeError('Cannot get Core: OMPy is not initialized.')
-
-        return _core_instance
+        self.core = _core
 
     def print_ln(self, text):
         cdef text_bytes = text.encode('utf8')
@@ -29,4 +18,5 @@ cdef class Core:
 
 
 cdef public void OMPy_setCore(ICore* core):
-    Core.set_core(core)
+    global _core
+    _core = core
