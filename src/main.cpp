@@ -36,20 +36,27 @@ struct OMPyComponent final : IComponent {
 
         PyImport_ImportModule("ompy");
         OMPy_setCore(core);
+        Py_UNBLOCK_THREADS
     }
 
     void onReady() override {
+        Py_BLOCK_THREADS
+
         if(PyImport_ImportModule("python") == nullptr)
             PyErr_Print();
+
+        Py_UNBLOCK_THREADS
     }
 
     void free() override {
+        Py_BLOCK_THREADS
         OMPy_setCore(nullptr);
         Py_FinalizeEx();
         delete this;
     }
 
     ICore* core = nullptr;
+    PyThreadState *_save;
 };
 
 
