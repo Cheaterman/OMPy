@@ -7,7 +7,7 @@
 
 
 struct OMPyComponent final : IComponent {
-    PROVIDE_UniqueID(0x33342353125330CC);
+    PROVIDE_UID(0x33342353125330CC);
 
     StringView componentName() const override {
         return "OMPy";
