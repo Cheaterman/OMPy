@@ -22,6 +22,11 @@ cdef class Core:
     def tick_rate(self):
         return self.core.tickRate()
 
+    def sha256(self, value, salt):
+        cdef StaticArray[char, shaOutputSize] result
+        self.core.sha256(value.encode('utf8'), salt.encode('utf8'), result)
+        return result.data().decode('utf8')
+
 
 cdef public void OMPy_setCore(ICore* core):
     global _core
