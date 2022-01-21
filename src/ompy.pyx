@@ -16,6 +16,12 @@ cdef class Core:
         cdef char* _text = text_bytes
         self.core.printLn('%s', _text)
 
+    def get_tick_count(self):
+        return self.core.getTickCount()
+
+    def tick_rate(self):
+        return self.core.tickRate()
+
 
 cdef public void OMPy_setCore(ICore* core):
     global _core
