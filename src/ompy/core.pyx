@@ -1,5 +1,11 @@
 cdef ICore* _core = NULL
 
+
+cdef public void OMPy_setCore(ICore* core):
+    global _core
+    _core = core
+
+
 cdef class Core:
     cdef ICore* core
 
@@ -26,8 +32,3 @@ cdef class Core:
         cdef StaticArray[char, shaOutputSize] result
         self.core.sha256(value.encode('utf8'), salt.encode('utf8'), result)
         return result.data().decode('utf8')
-
-
-cdef public void OMPy_setCore(ICore* core):
-    global _core
-    _core = core

@@ -3,8 +3,12 @@
 #include <sdk.hpp>
 
 #include "python_vars.h"
-#include "ompy.h"
+#include "ompy/core.h"
 
+extern "C" {
+    PyMODINIT_FUNC PyInit_ompy(void);
+    PyMODINIT_FUNC PyInit_core(void);
+}
 
 struct OMPyComponent final : IComponent {
     PROVIDE_UID(0x33342353125330CC);
@@ -30,12 +34,14 @@ struct OMPyComponent final : IComponent {
         Py_SetProgramName(programName);
 
         PyImport_AppendInittab("ompy", PyInit_ompy);
+        PyImport_AppendInittab("ompy.core", PyInit_core);
 
         Py_InitializeEx(false);
         PySys_SetArgv(1, &programName);
 
-        PyImport_ImportModule("ompy");
+        PyImport_ImportModule("ompy.core");
         OMPy_setCore(core);
+
         Py_UNBLOCK_THREADS
     }
 

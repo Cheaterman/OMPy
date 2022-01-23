@@ -1,5 +1,5 @@
 list(APPEND CMAKE_MODULE_PATH
-    ../lib/scikit-build/skbuild/resources/cmake
+    ${PROJECT_SOURCE_DIR}/lib/scikit-build/skbuild/resources/cmake
 )
 
 find_package(
@@ -9,11 +9,10 @@ find_package(
 )
 find_package(Cython REQUIRED)
 
-add_cython_target(ompy CXX)
 add_library(${PROJECT_NAME} SHARED
     main.cpp
-    ${ompy}
 )
+add_subdirectory(ompy)
 set_target_properties(${PROJECT_NAME} PROPERTIES
     PREFIX ""
     LIBRARY_OUTPUT_DIRECTORY ".."
@@ -26,6 +25,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 )
 target_link_libraries(${PROJECT_NAME} PRIVATE
     SDK
+    ompy_module
     ${Python3_LIBRARIES}
 )
 
