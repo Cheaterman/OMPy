@@ -9,6 +9,12 @@ cdef public void OMPy_setCore(ICore* core):
 cdef class Config:
     cdef IConfig* config
 
+    def __init__(self):
+        if self.config is NULL:
+            raise RuntimeError(
+                'Cannot instantiate Config directly: use Core().get_config().'
+            )
+
     @staticmethod
     cdef Config from_config(IConfig* config):
         cdef Config self = Config.__new__(Config)
