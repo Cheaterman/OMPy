@@ -10,7 +10,7 @@ __path__ = 'ompy'
 class OMPyFinder(MetaPathFinder):
     valid_modules = set(
         name for name in sys.builtin_module_names
-        if name.startswith('ompy')
+        if name.startswith('ompy.')
     )
 
     def find_spec(self, fullname, path, target=None):

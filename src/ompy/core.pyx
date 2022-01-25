@@ -6,6 +6,26 @@ cdef public void OMPy_setCore(ICore* core):
     _core = core
 
 
+cdef class Config:
+    cdef IConfig* config
+
+    @staticmethod
+    cdef Config from_config(IConfig* config):
+        cdef Config self = Config.__new__(Config)
+        self.config = config
+        return self
+
+    def get_string(self, key):
+        cdef StringView value = self.config.getString(key.encode('utf8'))
+        return bytes(value).decode('utf8')
+
+    def get_int(self, key):
+        return self.config.getInt(key.encode('utf8'))[0]
+
+    def get_float(self, key):
+        return self.config.getFloat(key.encode('utf8'))[0]
+
+
 cdef class Core:
     cdef ICore* core
 
@@ -16,6 +36,23 @@ cdef class Core:
             )
 
         self.core = _core
+
+    def get_version(self):
+        cdef SemanticVersion* version
+        try:
+            version = new SemanticVersion(self.core.getVersion())
+            return (
+                version.major,
+                version.minor,
+                version.patch,
+                version.prerel,
+            )
+        finally:
+            del version
+
+    def get_config(self):
+        cdef IConfig* core_config = &self.core.getConfig()
+        return Config.from_config(core_config)
 
     def print_ln(self, text):
         cdef text_bytes = text.encode('utf8')
