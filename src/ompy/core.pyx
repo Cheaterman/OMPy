@@ -22,14 +22,30 @@ cdef class Config:
         return self
 
     def get_string(self, key):
-        cdef StringView value = self.config.getString(key.encode('utf8'))
+        cdef const char* value = self.config.getString(
+            key.encode('utf8')
+        ).data()
+
+        if value is NULL:
+            raise KeyError(key)
+
         return bytes(value).decode('utf8')
 
     def get_int(self, key):
-        return self.config.getInt(key.encode('utf8'))[0]
+        value = self.config.getInt(key.encode('utf8'))
+
+        if value is NULL:
+            raise KeyError(key)
+
+        return value[0]
 
     def get_float(self, key):
-        return self.config.getFloat(key.encode('utf8'))[0]
+        value = self.config.getFloat(key.encode('utf8'))
+
+        if value is NULL:
+            raise KeyError(key)
+
+        return value[0]
 
 
 cdef class Core:
